@@ -22,7 +22,8 @@ Vai pedir a senha do sudo. Quando terminar:
 - **Prompt:** Starship, preset bracketed segments
 - **Linguagens (mise):** Go, Node LTS, Python 3.14
 - **CLIs (mise):** eza, bat, fd, ripgrep, fzf, zoxide, atuin, lazygit, delta, gh, yq, tldr, gitleaks, topgrade
-- **CLIs (apt):** jq, btop, fastfetch, wl-clipboard, xclip
+- **Base (apt):** git, curl, compactação (zip, 7zip, unrar...), gcc/g++/clang/cmake, libs de build, codecs (ubuntu-restricted-extras)
+- **CLIs (apt):** jq, btop, htop, fastfetch, tree, sqlite3, dig, wl-clipboard, xclip
 - **Fontes:** JetBrainsMono, FiraCode, CascadiaCode (Nerd Fonts), JetBrainsMono como mono do sistema
 - **GNOME:** Tweaks, Extension Manager, Caffeine, Clipboard Indicator
 - **Flatpak:** Bazaar, Flatseal, Chrome, Discord, Spotify
@@ -36,7 +37,7 @@ Vai pedir a senha do sudo. Quando terminar:
 |---|---|
 | Instalar/atualizar uma linguagem ou CLI | `dot_config/mise/config.toml` |
 | Adicionar app Flatpak ou extensão do GNOME | `.chezmoidata/packages.yaml` |
-| Pacote apt novo | `run_once_before_10-install-packages.sh.tmpl` |
+| Pacote apt novo | `.chezmoidata/packages.yaml` (seção `apt`) |
 | Alias, função, config do shell | `dot_zshrc` |
 | Algo só desta máquina (tokens, paths) | `~/.zshrc.local` — **não versionado** |
 | Nome/email do git | `.chezmoi.toml.tmpl` |

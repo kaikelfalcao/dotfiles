@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Pacotes de sistema (apt). Roda uma vez por máquina.
+# Pacotes de sistema (apt), lidos de .chezmoidata/packages.yaml.
+# Roda de novo sempre que a lista mudar (o conteúdo renderizado muda).
 set -euo pipefail
 
 log()  { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
@@ -10,24 +11,34 @@ if ! command -v apt-get >/dev/null; then
   exit 0
 fi
 
-CORE=(zsh git curl wget unzip fontconfig build-essential ca-certificates jq btop fastfetch
-      wl-clipboard xclip)
-{{- if .gnome }}
-GNOME=(gnome-tweaks gnome-shell-extension-manager
-       flatpak gnome-software-plugin-flatpak dconf-cli)
-{{- else }}
-GNOME=()
-{{- end }}
+export DEBIAN_FRONTEND=noninteractive
+
+# Instala um grupo de uma vez; se falhar (pacote inexistente), tenta um por um
+install_group() {
+  local name="$1"; shift
+  log "Instalando grupo: $name"
+  if ! sudo -E apt-get install -y --no-install-recommends "$@"; then
+    warn "Falha no grupo $name — tentando pacote por pacote"
+    for pkg in "$@"; do
+      sudo -E apt-get install -y --no-install-recommends "$pkg" || warn "Não foi possível instalar $pkg"
+    done
+  fi
+}
+
+# Aceita a licença das fontes da Microsoft (ubuntu-restricted-extras) sem perguntar
+echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" \
+  | sudo debconf-set-selections
 
 log "Atualizando índices do apt"
 sudo apt-get update -y
 
-log "Instalando pacotes base"
-sudo apt-get install -y "${CORE[@]}"
+{{ range $group, $pkgs := .apt -}}
+install_group {{ $group | quote }}{{ range $pkgs }} {{ . | quote }}{{ end }}
+{{ end -}}
 
-for pkg in "${GNOME[@]}"; do
-  sudo apt-get install -y "$pkg" || warn "Falha ao instalar $pkg"
-done
+{{- if .gnome }}
+install_group "desktop"{{ range .desktop.apt }} {{ . | quote }}{{ end }}
+{{- end }}
 
 ZSH_BIN="$(command -v zsh)"
 if [ "$(getent passwd "$USER" | cut -d: -f7)" != "$ZSH_BIN" ]; then

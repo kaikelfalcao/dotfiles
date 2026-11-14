@@ -1,6 +1,88 @@
 # Listas usadas pelos scripts de instalação.
 # Editar este arquivo e rodar `chezmoi apply` instala o que for novo.
 
+# Pacotes apt, por grupo. Os grupos em `desktop` só entram em máquina com GNOME.
+apt:
+  base:
+    - zsh
+    - git
+    - curl
+    - wget
+    - ca-certificates
+    - gnupg
+    - software-properties-common
+    - apt-transport-https
+    - lsb-release
+    - openssh-client
+    - rsync
+    - file
+    - fontconfig
+
+  compactacao:
+    - zip
+    - unzip
+    - 7zip
+    - unrar
+    - tar
+    - gzip
+    - xz-utils
+    - zstd
+
+  build:            # compiladores e ferramentas de build
+    - build-essential
+    - gcc
+    - g++
+    - make
+    - cmake
+    - pkg-config
+    - autoconf
+    - automake
+    - libtool
+    - gdb
+    - clang
+
+  libs:             # headers p/ compilar Python, Ruby e módulos nativos (pip/npm/gem)
+    - libssl-dev
+    - zlib1g-dev
+    - libffi-dev
+    - libsqlite3-dev
+    - libreadline-dev
+    - libbz2-dev
+    - liblzma-dev
+    - libncurses-dev
+    - libgdbm-dev
+    - tk-dev
+    - uuid-dev
+    - libxml2-dev
+    - libxmlsec1-dev
+    - libyaml-dev
+    - libpq-dev
+
+  utils:
+    - jq
+    - btop
+    - htop
+    - fastfetch
+    - tree
+    - sqlite3
+    - net-tools
+    - bind9-dnsutils   # dig, nslookup
+    - wl-clipboard
+    - xclip
+
+desktop:
+  apt:
+    - gnome-tweaks
+    - gnome-shell-extension-manager
+    - dconf-cli
+    - flatpak
+    - gnome-software-plugin-flatpak
+    - ubuntu-restricted-extras   # codecs, fontes da Microsoft, unrar
+    - ffmpeg
+    - gstreamer1.0-libav
+    - gstreamer1.0-plugins-bad
+    - gstreamer1.0-plugins-ugly
+
 # Extensões do GNOME, baixadas de extensions.gnome.org (UUID da extensão)
 gnomeExtensions:
   - caffeine@patapon.info            # impede a tela de bloquear/suspender
