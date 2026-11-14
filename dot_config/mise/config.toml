@@ -17,6 +17,7 @@ fzf = "latest"       # busca fuzzy
 zoxide = "latest"    # cd inteligente
 atuin = "latest"     # histórico do shell
 lazygit = "latest"
+lazydocker = "latest"
 delta = "latest"     # diffs do git
 gh = "latest"        # GitHub CLI
 yq = "latest"

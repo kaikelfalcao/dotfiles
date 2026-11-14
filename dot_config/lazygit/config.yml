@@ -1,0 +1,21 @@
+# lazygit — https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
+gui:
+  nerdFontsVersion: "3"   # ícones (Nerd Fonts já instaladas)
+  border: rounded
+  showFileTree: true
+  showRandomTip: false
+  showCommandLog: false
+
+git:
+  # Diffs com delta. Use `|` dentro do lazygit para alternar entre eles.
+  diffRenderers:
+    - name: delta
+      command: delta --{{colorScheme}} --paging=never --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
+    - name: delta lado a lado
+      command: delta --{{colorScheme}} --paging=never --side-by-side --width={{width}}
+    - name: git puro
+      type: rawGit
+
+# Quem atualiza o lazygit é o mise/topgrade
+update:
+  method: never

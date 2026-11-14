@@ -1,0 +1,9 @@
+# lazydocker — https://github.com/jesseduffield/lazydocker/blob/master/docs/Config.md
+gui:
+  border: rounded
+  returnImmediately: true     # volta direto para a UI após um comando
+  containerStatusHealthStyle: long
+
+logs:
+  since: 60m
+  timestamps: false

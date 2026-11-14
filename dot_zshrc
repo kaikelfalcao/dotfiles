@@ -46,6 +46,7 @@ if has eza; then
 fi
 has bat     && alias cat='bat --paging=never'
 has lazygit && alias lg='lazygit'
+has lazydocker && alias lzd='lazydocker'
 # Clipboard estilo macOS (Wayland primeiro, X11 como fallback)
 if has wl-copy && [ -n "$WAYLAND_DISPLAY" ]; then
   alias pbcopy='wl-copy'
