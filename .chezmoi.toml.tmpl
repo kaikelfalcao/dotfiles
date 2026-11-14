@@ -1,0 +1,9 @@
+{{- $isGnome := or (ne (lookPath "gnome-shell") "") (contains "GNOME" (env "XDG_CURRENT_DESKTOP")) -}}
+[data]
+  name = "Kaíke Lima Falcão de Oliveira"
+  email = "kaikelfalcao@gmail.com"
+  github = "kaikelfalcao"
+  gnome = {{ $isGnome }}
+
+[git]
+  autoCommit = false

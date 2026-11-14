@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Instala o mise e todas as ferramentas do ~/.config/mise/config.toml.
+# Roda de novo sempre que esse arquivo mudar.
+# config hash: {{ include "dot_config/mise/config.toml" | sha256sum }}
+set -euo pipefail
+
+export PATH="$HOME/.local/bin:$PATH"
+
+if ! command -v mise >/dev/null; then
+  echo "==> Instalando mise"
+  curl -fsSL https://mise.run | sh
+fi
+
+echo "==> Instalando ferramentas via mise"
+mise install --yes
+
+# gh: completions e login (o login só é pedido se ainda não houver sessão)
+if mise exec -- gh auth status >/dev/null 2>&1; then
+  echo "==> gh já autenticado"
+else
+  echo "==> Rode 'gh auth login' depois para autenticar no GitHub"
+fi
+
+# tldr: baixa o cache das páginas
+mise exec -- tldr --update >/dev/null 2>&1 || true

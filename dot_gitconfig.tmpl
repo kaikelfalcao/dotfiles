@@ -1,0 +1,58 @@
+[user]
+	name = {{ .name }}
+	email = {{ .email }}
+
+[github]
+	user = {{ .github }}
+
+[init]
+	defaultBranch = main
+
+[pull]
+	rebase = true
+
+[push]
+	autoSetupRemote = true
+
+[fetch]
+	prune = true
+
+[rebase]
+	autoStash = true
+
+[core]
+	pager = delta
+	editor = nano
+
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	navigate = true
+	line-numbers = true
+	side-by-side = false
+
+[merge]
+	conflictStyle = zdiff3
+
+[diff]
+	colorMoved = default
+
+[credential "https://github.com"]
+	helper =
+	helper = !gh auth git-credential
+
+[credential "https://gist.github.com"]
+	helper =
+	helper = !gh auth git-credential
+
+[alias]
+	st = status -sb
+	co = checkout
+	sw = switch
+	br = branch
+	cm = commit -m
+	amend = commit --amend --no-edit
+	lg = log --graph --oneline --decorate --all
+	last = log -1 HEAD --stat
+	undo = reset --soft HEAD~1

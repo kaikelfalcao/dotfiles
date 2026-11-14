@@ -1,0 +1,22 @@
+# Plugins do zsh, clonados direto do GitHub e atualizados semanalmente
+# (`chezmoi apply --refresh-externals` força a atualização)
+
+[".local/share/zsh/plugins/zsh-autosuggestions"]
+  type = "git-repo"
+  url = "https://github.com/zsh-users/zsh-autosuggestions.git"
+  refreshPeriod = "168h"
+
+[".local/share/zsh/plugins/zsh-syntax-highlighting"]
+  type = "git-repo"
+  url = "https://github.com/zsh-users/zsh-syntax-highlighting.git"
+  refreshPeriod = "168h"
+
+[".local/share/zsh/plugins/zsh-completions"]
+  type = "git-repo"
+  url = "https://github.com/zsh-users/zsh-completions.git"
+  refreshPeriod = "168h"
+
+[".local/share/zsh/plugins/fzf-tab"]
+  type = "git-repo"
+  url = "https://github.com/Aloxaf/fzf-tab.git"
+  refreshPeriod = "168h"

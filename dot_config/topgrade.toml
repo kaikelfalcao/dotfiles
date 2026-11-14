@@ -1,0 +1,9 @@
+# topgrade — atualiza apt, flatpak, mise, firmware, extensões do GNOME etc.
+# Rode com: topgrade  (ou o alias `up`)
+# Referência: https://github.com/topgrade-rs/topgrade/blob/main/config.example.toml
+
+[misc]
+# Passos que não quero que o topgrade execute, ex.: ["snap", "containers"]
+disable = []
+# Limpa caches/pacotes antigos depois de atualizar
+cleanup = true

@@ -1,0 +1,71 @@
+# ~/.zshrc — gerenciado pelo chezmoi (edite com: chezmoi edit ~/.zshrc)
+
+export PATH="$HOME/.local/bin:$PATH"
+export EDITOR="${EDITOR:-nano}"
+ZPLUGINS="$HOME/.local/share/zsh/plugins"
+
+has() { command -v "$1" >/dev/null 2>&1; }
+
+# ---------- Histórico ----------
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=50000
+SAVEHIST=50000
+setopt HIST_IGNORE_ALL_DUPS HIST_IGNORE_SPACE HIST_REDUCE_BLANKS SHARE_HISTORY EXTENDED_HISTORY
+
+# ---------- Opções ----------
+setopt AUTO_CD INTERACTIVE_COMMENTS NO_BEEP
+bindkey -e
+bindkey '^[[1;5C' forward-word    # Ctrl+→
+bindkey '^[[1;5D' backward-word   # Ctrl+←
+bindkey '^[[3~'   delete-char     # Delete
+
+# ---------- mise (precisa vir antes das outras ferramentas) ----------
+has mise && eval "$(mise activate zsh)"
+
+# ---------- Completions ----------
+fpath=("$ZPLUGINS/zsh-completions/src" $fpath)
+autoload -Uz compinit && compinit -d "$HOME/.cache/zcompdump"
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' menu no
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always --icons $realpath'
+
+# ---------- Ferramentas ----------
+has fzf     && source <(fzf --zsh)
+[ -r "$ZPLUGINS/fzf-tab/fzf-tab.plugin.zsh" ] && source "$ZPLUGINS/fzf-tab/fzf-tab.plugin.zsh"
+has zoxide  && eval "$(zoxide init zsh)"
+has atuin   && eval "$(atuin init zsh)"     # Ctrl+R e seta ↑
+has starship && eval "$(starship init zsh)"
+has gh      && eval "$(gh completion -s zsh)"
+
+# ---------- Aliases ----------
+if has eza; then
+  alias ls='eza --icons --group-directories-first'
+  alias ll='eza -l --icons --git --group-directories-first'
+  alias la='eza -la --icons --git --group-directories-first'
+  alias lt='eza --tree --level=2 --icons'
+fi
+has bat     && alias cat='bat --paging=never'
+has lazygit && alias lg='lazygit'
+# Clipboard estilo macOS (Wayland primeiro, X11 como fallback)
+if has wl-copy && [ -n "$WAYLAND_DISPLAY" ]; then
+  alias pbcopy='wl-copy'
+  alias pbpaste='wl-paste --no-newline'
+elif has xclip; then
+  alias pbcopy='xclip -selection clipboard'
+  alias pbpaste='xclip -selection clipboard -o'
+fi
+alias ..='cd ..'
+alias ...='cd ../..'
+alias g='git'
+alias up='topgrade'
+alias dot='chezmoi'
+alias dotcd='cd "$(chezmoi source-path)"'
+
+# ---------- Local (não versionado) ----------
+[ -r "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"
+
+# ---------- Plugins que precisam vir por último ----------
+[ -r "$ZPLUGINS/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && \
+  source "$ZPLUGINS/zsh-autosuggestions/zsh-autosuggestions.zsh"
+[ -r "$ZPLUGINS/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ] && \
+  source "$ZPLUGINS/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"

@@ -1,0 +1,26 @@
+[tools]
+# Linguagens
+go = "latest"
+node = "lts"
+python = "3.14"
+
+# Prompt e manutenção
+starship = "latest"
+topgrade = "latest"
+
+# CLIs modernas
+eza = "latest"       # ls
+bat = "latest"       # cat
+fd = "latest"        # find
+ripgrep = "latest"   # grep
+fzf = "latest"       # busca fuzzy
+zoxide = "latest"    # cd inteligente
+atuin = "latest"     # histórico do shell
+lazygit = "latest"
+delta = "latest"     # diffs do git
+gh = "latest"        # GitHub CLI
+yq = "latest"
+tealdeer = "latest"  # tldr
+
+[settings]
+experimental = false
