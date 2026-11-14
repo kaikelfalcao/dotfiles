@@ -1,0 +1,25 @@
+{{- if .gnome -}}
+#!/usr/bin/env bash
+# Instala os apps Flatpak de .chezmoidata/packages.yaml (no escopo do usuário,
+# sem sudo). Roda de novo sempre que a lista mudar.
+set -euo pipefail
+
+command -v flatpak >/dev/null || { echo "[!] flatpak não instalado — pulando"; exit 0; }
+
+APPS=(
+{{- range .flatpaks }}
+  {{ . | quote }}
+{{- end }}
+)
+
+flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+for app in "${APPS[@]}"; do
+  if flatpak info "$app" >/dev/null 2>&1; then
+    echo "==> $app já instalado"
+  else
+    echo "==> Instalando $app"
+    flatpak install --user --noninteractive -y flathub "$app"
+  fi
+done
+{{- end }}

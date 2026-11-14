@@ -1,0 +1,38 @@
+{{- if .gnome -}}
+#!/usr/bin/env bash
+# Editores pelos instaladores oficiais:
+#   - VS Code: repositório apt da Microsoft (atualiza junto com o sistema / topgrade)
+#   - Zed: script oficial do zed.dev (instala em ~/.local e se atualiza sozinho)
+set -euo pipefail
+
+# ---------- VS Code ----------
+if command -v code >/dev/null; then
+  echo "==> VS Code já instalado ($(code --version | head -1))"
+else
+  echo "==> Adicionando repositório da Microsoft para o VS Code"
+  # Evita a pergunta interativa do pacote sobre adicionar o repositório
+  echo "code code/add-microsoft-repo boolean true" | sudo debconf-set-selections
+  sudo apt-get install -y wget gpg apt-transport-https
+  KEY="$(mktemp)"; trap 'rm -f "$KEY"' EXIT
+  wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor --yes -o "$KEY"
+  sudo install -D -o root -g root -m 644 "$KEY" /usr/share/keyrings/microsoft.gpg
+  sudo tee /etc/apt/sources.list.d/vscode.sources >/dev/null <<'EOF'
+Types: deb
+URIs: https://packages.microsoft.com/repos/code
+Suites: stable
+Components: main
+Architectures: amd64,arm64,armhf
+Signed-By: /usr/share/keyrings/microsoft.gpg
+EOF
+  sudo apt-get update -y
+  sudo apt-get install -y code
+fi
+
+# ---------- Zed ----------
+if command -v zed >/dev/null || [ -x "$HOME/.local/bin/zed" ]; then
+  echo "==> Zed já instalado"
+else
+  echo "==> Instalando Zed"
+  curl -fsSL https://zed.dev/install.sh | sh
+fi
+{{- end }}

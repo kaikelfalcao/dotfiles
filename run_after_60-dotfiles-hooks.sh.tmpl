@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Ativa os git hooks versionados (.githooks/) no repositório dos dotfiles.
+# Roda em todo apply, mas é instantâneo e não faz nada se já estiver configurado.
+set -euo pipefail
+
+SRC={{ .chezmoi.sourceDir | quote }}
+[ -d "$SRC/.git" ] || exit 0
+
+if [ "$(git -C "$SRC" config --get core.hooksPath || true)" != ".githooks" ]; then
+  git -C "$SRC" config core.hooksPath .githooks
+  echo "==> Hook pre-commit (gitleaks) ativado nos dotfiles"
+fi

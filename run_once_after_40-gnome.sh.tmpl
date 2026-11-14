@@ -1,6 +1,6 @@
 {{- if .gnome -}}
 #!/usr/bin/env bash
-# Ajustes do GNOME: fonte monoespaçada do sistema e extensão Caffeine.
+# Ajustes do GNOME: fonte monoespaçada do sistema.
 set -euo pipefail
 
 # Fonte mono do sistema (usada pelo Ptyxis / GNOME Terminal com "fonte do sistema")
@@ -11,23 +11,5 @@ if gsettings list-schemas | grep -qx org.gnome.Ptyxis; then
   gsettings set org.gnome.Ptyxis use-system-font true
 fi
 
-# Habilita a extensão Caffeine (vale a partir do próximo login no Wayland)
-UUID="caffeine@patapon.info"
-gsettings set org.gnome.shell disable-user-extensions false
-python3 - "$UUID" <<'PY'
-import ast, subprocess, sys
-uuid = sys.argv[1]
-raw = subprocess.check_output(
-    ["gsettings", "get", "org.gnome.shell", "enabled-extensions"], text=True
-).strip()
-raw = raw.removeprefix("@as ")
-exts = ast.literal_eval(raw) if raw else []
-if uuid not in exts:
-    exts.append(uuid)
-    subprocess.check_call(
-        ["gsettings", "set", "org.gnome.shell", "enabled-extensions", str(exts)]
-    )
-PY
-
-echo "==> GNOME configurado (faça logout/login para ativar o Caffeine)"
+echo "==> GNOME configurado"
 {{- end }}

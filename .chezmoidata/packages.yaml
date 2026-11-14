@@ -1,0 +1,31 @@
+# Listas usadas pelos scripts de instalação.
+# Editar este arquivo e rodar `chezmoi apply` instala o que for novo.
+
+# Extensões do GNOME, baixadas de extensions.gnome.org (UUID da extensão)
+gnomeExtensions:
+  - caffeine@patapon.info            # impede a tela de bloquear/suspender
+  - clipboard-indicator@tudmotu.com  # histórico da área de transferência
+
+# Apps Flatpak do Flathub (ID do app — procure em https://flathub.org)
+flatpaks:
+  # Sistema
+  - io.github.kolunmi.Bazaar         # loja de apps Flatpak
+  - com.github.tchx84.Flatseal       # permissões dos flatpaks
+  # - io.missioncenter.MissionCenter # monitor de recursos (estilo Gerenciador de Tarefas)
+  # - it.mijorus.gearlever           # gerenciar AppImages
+  # - org.localsend.localsend_app    # enviar arquivos para celular/PCs na rede (AirDrop)
+
+  # Internet e mídia
+  - com.google.Chrome
+  - com.discordapp.Discord
+  - com.spotify.Client
+  # - org.videolan.VLC
+  # - com.obsproject.Studio
+
+  # Dev
+  # - com.usebruno.Bruno             # cliente de API (alternativa git-friendly ao Postman)
+  # - io.dbeaver.DBeaverCommunity    # cliente de banco de dados
+  # - me.iepure.devtoolbox           # JSON/JWT/base64/regex/hash e outras utilidades
+
+  # Produtividade
+  # - md.obsidian.Obsidian           # notas em Markdown

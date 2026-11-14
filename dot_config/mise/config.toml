@@ -21,6 +21,7 @@ delta = "latest"     # diffs do git
 gh = "latest"        # GitHub CLI
 yq = "latest"
 tealdeer = "latest"  # tldr
+gitleaks = "latest"  # detecta segredos em repositórios git
 
 [settings]
 experimental = false

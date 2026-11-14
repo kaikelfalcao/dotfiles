@@ -1,0 +1,50 @@
+{{- if .gnome -}}
+#!/usr/bin/env bash
+# Instala e ativa extensões do GNOME a partir de extensions.gnome.org.
+# Roda de novo sempre que a lista em .chezmoidata/packages.yaml mudar.
+set -euo pipefail
+
+EXTENSIONS=(
+{{- range .gnomeExtensions }}
+  {{ . | quote }}
+{{- end }}
+)
+
+SHELL_VERSION="$(gnome-shell --version | awk '{print $3}' | cut -d. -f1)"
+TMP="$(mktemp -d)"
+trap 'rm -rf "$TMP"' EXIT
+
+enable_ext() {
+  # No Wayland, uma extensão recém-instalada só é carregada após novo login,
+  # então em vez de `gnome-extensions enable` adicionamos à lista do gsettings.
+  python3 - "$1" <<'PY'
+import ast, subprocess, sys
+uuid = sys.argv[1]
+raw = subprocess.check_output(
+    ["gsettings", "get", "org.gnome.shell", "enabled-extensions"], text=True
+).strip().removeprefix("@as ")
+exts = ast.literal_eval(raw) if raw else []
+if uuid not in exts:
+    exts.append(uuid)
+    subprocess.check_call(["gsettings", "set", "org.gnome.shell", "enabled-extensions", str(exts)])
+PY
+}
+
+gsettings set org.gnome.shell disable-user-extensions false
+
+for uuid in "${EXTENSIONS[@]}"; do
+  if [ -d "$HOME/.local/share/gnome-shell/extensions/$uuid" ] || [ -d "/usr/share/gnome-shell/extensions/$uuid" ]; then
+    echo "==> $uuid já instalada"
+  else
+    echo "==> Instalando $uuid (GNOME $SHELL_VERSION)"
+    url="$(curl -fsS "https://extensions.gnome.org/extension-info/?uuid=$uuid&shell_version=$SHELL_VERSION" \
+      | python3 -c 'import json,sys; print(json.load(sys.stdin)["download_url"])')" || {
+      echo "[!] $uuid não tem versão para GNOME $SHELL_VERSION — pulando"; continue; }
+    curl -fsSL "https://extensions.gnome.org$url" -o "$TMP/$uuid.zip"
+    gnome-extensions install --force "$TMP/$uuid.zip"
+  fi
+  enable_ext "$uuid"
+done
+
+echo "==> Extensões prontas (faça logout/login para carregá-las)"
+{{- end }}

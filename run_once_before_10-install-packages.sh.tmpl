@@ -13,7 +13,7 @@ fi
 CORE=(zsh git curl wget unzip fontconfig build-essential ca-certificates jq btop fastfetch
       wl-clipboard xclip)
 {{- if .gnome }}
-GNOME=(gnome-tweaks gnome-shell-extension-manager gnome-shell-extension-caffeine
+GNOME=(gnome-tweaks gnome-shell-extension-manager
        flatpak gnome-software-plugin-flatpak dconf-cli)
 {{- else }}
 GNOME=()
@@ -28,11 +28,6 @@ sudo apt-get install -y "${CORE[@]}"
 for pkg in "${GNOME[@]}"; do
   sudo apt-get install -y "$pkg" || warn "Falha ao instalar $pkg"
 done
-
-if command -v flatpak >/dev/null; then
-  log "Adicionando Flathub"
-  sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-fi
 
 ZSH_BIN="$(command -v zsh)"
 if [ "$(getent passwd "$USER" | cut -d: -f7)" != "$ZSH_BIN" ]; then

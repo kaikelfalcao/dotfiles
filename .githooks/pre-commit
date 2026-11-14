@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+# Bloqueia commits que contenham segredos (tokens, chaves, senhas).
+# Para pular em caso de falso positivo: git commit --no-verify
+# Para ignorar uma linha específica, adicione o comentário: gitleaks:allow
+set -e
+
+if command -v mise >/dev/null 2>&1; then
+  exec mise exec gitleaks -- gitleaks git --pre-commit --staged --redact --verbose
+elif command -v gitleaks >/dev/null 2>&1; then
+  exec gitleaks git --pre-commit --staged --redact --verbose
+else
+  echo "[!] gitleaks não encontrado — instale com: mise use -g gitleaks" >&2
+  exit 1
+fi
